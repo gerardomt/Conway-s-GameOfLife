@@ -1,5 +1,5 @@
 .root {
-    -fx-background-color: black;
+    -fx-background-image: url("background.png");
 }
 
 GridPane {
@@ -13,6 +13,11 @@ GridPane {
 
 HBox{
     -fx-alignment: bottom-center;
+}
+
+#hbox-lattice{
+    -fx-border-width: 5px;
+    -fx-border-color: gray;
 }
 
 Text{

@@ -28,7 +28,7 @@ public class UseAutomata extends Application {
     @Override
     public void start(Stage primaryStage){
         primaryStage.setTitle("Automata");
-        primaryStage.setMaximized(true);
+        primaryStage.setFullScreen(true);
         menu(primaryStage);
         primaryStage.show();
     }

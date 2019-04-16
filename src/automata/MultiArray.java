@@ -29,6 +29,7 @@ public class MultiArray<E>{
      * @return The element in the specified position.
      * @throw IndexOutOfBoundsException If the index is out of range
      */
+    @SuppressWarnings("unchecked")
     public E getElement(int[] index){
         checkIndex(index);
 

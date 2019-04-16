@@ -83,9 +83,9 @@ public class Cell{
                 break;
             }
             if (newPosX<0) newPosX=lattice.getDimension(0)-1;
-            if (newPosY<0) newPosY=lattice.getDimension(0)-1;
+            if (newPosY<0) newPosY=lattice.getDimension(1)-1;
             if (newPosX>=lattice.getDimension(0)) newPosX=0;
-            if (newPosY>=lattice.getDimension(0)) newPosY=0;
+            if (newPosY>=lattice.getDimension(1)) newPosY=0;
             neighborhood[i] = lattice.getElement(new int[] {newPosX, newPosY});
         }
     }

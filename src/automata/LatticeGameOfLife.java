@@ -2,37 +2,84 @@ package automata;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 
 /**
  * Manage the specific rules of the GameOfLife lattice
  * @author gerardomt
  * @version 0.1
  */
-public class LatticeGameOfLife extends Lattice{
-
+public class LatticeGameOfLife{
+    private int cellsHeight, cellsWidth;
+    private MultiArray<Cell> lattice;
+    private Pane root;
     private int maxState;
+    private double cellSize;
 
     /**
      * Class constructor
      * @param size Size of the lattice. The lattice is a square
      * lattice.
-     * @param maxState Max State of the lattice. In this case the max
-     * state is always 1.
      * @param root Pane to add the lattice
      */
-    public LatticeGameOfLife(int size, int maxState, Pane root){
-        super(size, maxState, root);
-        this.maxState = maxState;
+    public LatticeGameOfLife(Pane root, int cellsHeight){
+        double width = Screen.getPrimary().getVisualBounds().getWidth()-20.0;
+        double height = Screen.getPrimary().getVisualBounds().getHeight()-40;
+
+        cellSize = height/cellsHeight;
+        this.cellsHeight = cellsHeight;
+        this.cellsWidth = (int)(width/cellSize);
+        lattice = new MultiArray<Cell>(new int[] {cellsWidth,cellsHeight});
+        this.root = root;
+        this.maxState = 2;
+
+        initLattice();
+        setCellsNeighborhood();
+        update();
     }
 
     /**
-     * Set the colors of the cells on the lattice
+     * Perform the rules and changes to execute in each time step
      */
-    protected void setColor(){
+    public void change(){
+        rules();
+        update();
+    }
+
+    /**
+     * Inicialize the GameOfLife's lattice.
+     */ 
+    protected void initLattice(){
         Cell cell;
-        for (int i=0; i<getSize(); i++){
-            for (int j=0; j<getSize(); j++){
+        for (int i=0; i<getCellsWidth(); i++){
+            for (int j=0; j<getCellsHeight(); j++){
+                cell = new Cell(0, 2, cellSize, i, j);
+                lattice.setElement(new int[] {i,j}, cell);
+                cell.setState((int)(Math.random()*(maxState)));
+                root.getChildren().add(getCell(i,j).getFigure());
+            }
+        }
+    }
+
+    /**
+     * Set the neighborhood of the cells
+     */
+    private void setCellsNeighborhood(){
+        for (int i=0; i<getCellsWidth();i++){
+            for (int j=0; j<getCellsHeight();j++)
+                lattice.getElement(new int[] {i,j}).setNeighborhood(lattice);
+        }
+    }
+
+    /**
+     * Update the lattice
+     */
+    protected void update(){
+        Cell cell;
+        for (int i=0; i<getCellsWidth();i++){
+            for (int j=0;j<getCellsHeight(); j++){
                 cell = getCell(i,j);
+                cell.update();
                 if (cell.getState()==1)
                     cell.getFigure().setFill(Color.WHITE);
                 else
@@ -42,42 +89,37 @@ public class LatticeGameOfLife extends Lattice{
     }
 
     /**
-     * Perform the rules and changes to execute in each time step
+     * Return a specific cell on the lattice
+     * @param i Cooddinate on x-axis
+     * @param j Coordinate on y-axis
+     * @return Specific cell
      */
-    public void change(){
-        rules();
-        update();
-        setColor();
-        getData().add(getCritic());
+    public Cell getCell(int i, int j){
+        return lattice.getElement(new int[] {i,j});
     }
 
     /**
-     * Count the number of cells alive
-     * @return The current number of cells alive
+     * Devuelve el tamaño de la lattice
+     * @return int
      */
-    protected int getCritic(){
-        int critic = 0;
-        for (int i=0; i<getSize(); i++){
-            for (int j=0; j<getSize(); j++){
-                if (getCell(i,j).getState()==1)
-                    critic++;
-            }
-        }
-        return critic;
+    public int getCellsHeight(){
+        return cellsHeight;
+    }
+
+    public int getCellsWidth(){
+        return cellsWidth;
     }
 
     //Rules
 
     /**
      * GameOfLife's Rules
-     * Any site (dead or alive) with tree living
-     * neighbor sites stays alive or is born
      */
     private void rules(){
         Cell cell;
         int livingNeighbor;
-        for (int i=0; i<getSize(); i++){
-            for (int j=0; j<getSize(); j++){
+        for (int i=0; i<getCellsWidth(); i++){
+            for (int j=0; j<getCellsHeight(); j++){
                 cell = getCell(i,j);
                 livingNeighbor = 0;
                 for (Cell c: cell.getNeighborhood()){
