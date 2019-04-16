@@ -1,7 +1,7 @@
 /*
  * Autómatas
  */
-package automatas;
+package automata;
 
 import javafx.animation.Animation;
 import javafx.stage.Stage;
@@ -90,7 +90,7 @@ public class Grafica{
         salir.setOnAction(new EventHandler<ActionEvent>(){
                 @Override
                 public void handle(ActionEvent event){
-                    UsoAutomata p = new UsoAutomata();
+                    UseAutomata p = new UseAutomata();
                     p.menu(stage);
                     //stage.close();
                 }

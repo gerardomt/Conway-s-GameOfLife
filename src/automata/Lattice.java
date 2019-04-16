@@ -7,7 +7,7 @@ public abstract class Lattice{
     // Size in pixels of the lattice
     private static final double LATTICE_SIZE  = 600.0;
     
-    private multiArray<Cell> lattice;
+    private MultiArray<Cell> lattice;
     private Pane root;
     private LinkedList<Integer> data;
     protected int maxState;
@@ -51,8 +51,7 @@ public abstract class Lattice{
     protected void initLattice(){
         for (int i=0; i<getSize(); i++){
             for (int j=0; j<getSize(); j++){
-                lattice.setElement(new int[] {i,j}, new Cell(0, maxState,
-                                        SIZE_LATTICE/getSize(), i, j);
+                lattice.setElement(new int[] {i,j}, new Cell(0, maxState, LATTICE_SIZE/getSize(), i, j));
                 root.getChildren().add(getCell(i,j).getFigure());
             }
         }
@@ -73,8 +72,8 @@ public abstract class Lattice{
      * Establece las vecindades de las celdas
      */
     private void setCellsNeighborhood(){
-        for (int i=0; i<lattice.length;i++){
-            for (int j=0; j<lattice.length;j++)
+        for (int i=0; i<lattice.getDimension(0);i++){
+            for (int j=0; j<lattice.getDimension(0);j++)
                 lattice.getElement(new int[] {i,j}).setNeighborhood(lattice);
         }
     }
@@ -83,8 +82,8 @@ public abstract class Lattice{
      * Actualiza el estado de la lattice
      */
     protected void update(){
-        for (int i=0; i<lattice.length;i++){
-            for (int j=0;j<lattice[i].length; j++){
+        for (int i=0; i<lattice.getDimension(0);i++){
+            for (int j=0;j<lattice.getDimension(1); j++){
                 lattice.getElement(new int[] {i,j}).update();
             }
         }

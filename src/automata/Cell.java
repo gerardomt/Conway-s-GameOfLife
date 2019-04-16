@@ -1,4 +1,4 @@
-package automatas;
+package automata;
 
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
@@ -10,7 +10,7 @@ import javafx.scene.paint.Color;
 public class Cell{
 
     protected Rectangle figure = new Rectangle();
-    private Celda[] neighborhood;
+    private Cell[] neighborhood;
     private int state;
     private int tempState;
     private int maxState;
@@ -32,21 +32,21 @@ public class Cell{
         this.maxState = maxState;
         posX = x;
         posY = y;
-        figura.setWidth(edge);
-        figura.setHeight(edge);
-        figura.setX(x*edge);
-        figura.setY(y*edge);
-        figura.setStroke(Color.BLACK);
+        figure.setWidth(edge);
+        figure.setHeight(edge);
+        figure.setX(x*edge);
+        figure.setY(y*edge);
+        figure.setStroke(Color.BLACK);
     }
 
     /**
      * Set the neighborhood of the cell with respect its position on the lattice
      * @param lattice Lattice where the cell is
      */
-    protected void setNeighborhood(MultiArray lattice){
+    protected void setNeighborhood(MultiArray<Cell> lattice){
         neighborhood = new Cell[8];
         int newPosX=-1;
-        int newPosY0-1;
+        int newPosY=-1;
         for (int i=0; i<8; i++){
             switch (i){
             case 0: //NW
@@ -85,7 +85,7 @@ public class Cell{
             if (newPosX<0) newPosX=lattice.getDimension(0)-1;
             if (newPosY<0) newPosY=lattice.getDimension(0)-1;
             if (newPosX>=lattice.getDimension(0)) newPosX=0;
-            if (nowPosY>=lattice.getDimension(0)) newPosY=0;
+            if (newPosY>=lattice.getDimension(0)) newPosY=0;
             neighborhood[i] = lattice.getElement(new int[] {newPosX, newPosY});
         }
     }
@@ -118,11 +118,11 @@ public class Cell{
     public void setState(int state){
         if (state < 0)
             this.state = 0;
-        else if (state > stateMax)
-            this.state = stateMax;
+        else if (state > maxState)
+            this.state = maxState;
         else
             this.state = state;
-        this.stateTemp = state;
+        this.tempState = state;
     }
 
     /**
@@ -130,7 +130,7 @@ public class Cell{
      * the next time step without modify the current state.
      * @param state
      */
-    private void setTempState(int state){ //provemos con private
+    public void setTempState(int state){
         this.tempState=state;
     }
 

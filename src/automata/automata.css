@@ -1,0 +1,44 @@
+.root {
+    -fx-background-color: black;
+}
+
+GridPane {
+    -fx-alignment: center;
+    -fx-hgap: 20px;
+    -fx-vgap: 20px;
+
+    -fx-border-width: 5px;
+    -fx-border-color: gray;
+}
+
+HBox{
+    -fx-alignment: bottom-center;
+}
+
+Text{
+    -fx-fill: red;
+}
+
+.label{
+    -fx-text-fill: #818181;
+}
+
+#hbox-patterns{
+    -fx-alignment: bottom-right;
+}
+
+#menu-title {
+   -fx-font-size: 60px;
+   -fx-font-family: "sans-serif";
+   -fx-fill: #818181;
+   -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );
+}
+
+.button {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-family: "Arial";
+    -fx-font-weight: bold;
+    -fx-background-color: linear-gradient(#818181, #333333);
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}

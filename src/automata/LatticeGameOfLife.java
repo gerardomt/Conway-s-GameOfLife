@@ -33,7 +33,7 @@ public class LatticeGameOfLife extends Lattice{
         for (int i=0; i<getSize(); i++){
             for (int j=0; j<getSize(); j++){
                 cell = getCell(i,j);
-                if (cell.getState()==0)
+                if (cell.getState()==1)
                     cell.getFigure().setFill(Color.WHITE);
                 else
                     cell.getFigure().setFill(Color.BLACK);
@@ -45,9 +45,9 @@ public class LatticeGameOfLife extends Lattice{
      * Perform the rules and changes to execute in each time step
      */
     public void change(){
-        livingNeighborhood();
-        remainAlive();
+        rules();
         update();
+        setColor();
         getData().add(getCritic());
     }
 
@@ -59,7 +59,7 @@ public class LatticeGameOfLife extends Lattice{
         int critic = 0;
         for (int i=0; i<getSize(); i++){
             for (int j=0; j<getSize(); j++){
-                if (getCell(i,j).getState()==maxState)
+                if (getCell(i,j).getState()==1)
                     critic++;
             }
         }
@@ -73,7 +73,7 @@ public class LatticeGameOfLife extends Lattice{
      * Any site (dead or alive) with tree living
      * neighbor sites stays alive or is born
      */
-    private void livingNeighborhood(){
+    private void rules(){
         Cell cell;
         int livingNeighbor;
         for (int i=0; i<getSize(); i++){
@@ -84,31 +84,12 @@ public class LatticeGameOfLife extends Lattice{
                     if (c.getState()==1)
                         livingNeighbor++;
                 }
-                if (livingNeighbor >= 3)
+                if (livingNeighbor<2)
+                    cell.setTempState(0);
+                else if (livingNeighbor>3)
+                    cell.setTempState(0);
+                else if (livingNeighbor==3 && cell.getState()==0)
                     cell.setTempState(1);
-            }
-        }
-    }
-
-    /**
-     * GameOfLife's Rules
-     * A living site with two living nearest
-     * neighbor sites remains alive
-     */
-    private void remainAlive(){
-        int livingNeighbor;
-        for (int i=0; i<getSize(); i++){
-            for (int j=0; i<getSize(); j++){
-                cell = getCell(i,j);
-                if (cell.getState()==1){
-                    livingNeighbor = 0;
-                    for (Cell c: cell.getNeighborhood()){
-                        if (c.getState()==1)
-                            livingNeighbor++;
-                    }
-                    if (livingNeighbor<2)
-                        cell.setTempState(0);
-                }
             }
         }
     }
